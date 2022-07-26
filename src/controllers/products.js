@@ -2,9 +2,9 @@ const ProductModel = require('../models/products')
 
 
 async function get(req, res) {
-  const { id } = req.params  
+  const { id } = req.params
 
-  const obj = id ? {_id: id} : null
+  const obj = id ? { _id: id } : null
 
   const products = await ProductModel.find(obj)
 
@@ -12,11 +12,11 @@ async function get(req, res) {
 }
 
 async function post(req, res) {
-   const {
+  const {
     name,
     brand,
     price,
-   } = req.body
+  } = req.body
 
   const product = new ProductModel({
     name,
@@ -31,7 +31,31 @@ async function post(req, res) {
   })
 }
 
+
+async function put(req, res) {
+  const { id } = req.params
+
+const product = await ProductModel.findOneAndUpdate({ _id: id}, req.body, {new: true})
+
+res.send({
+  message: 'success',
+  product
+})
+
+/*   
+Atualiza no BD, mas retorna o produto antes da alteracao
+const product = await ProductModel.findOne({ _id: id })
+
+  await product.updateOne(req.body)
+
+  res.send({
+    message: 'success',
+    product
+  }) */
+}
+
 module.exports = {
   get,
   post,
+  put,
 }
