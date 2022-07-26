@@ -35,27 +35,40 @@ async function post(req, res) {
 async function put(req, res) {
   const { id } = req.params
 
-const product = await ProductModel.findOneAndUpdate({ _id: id}, req.body, {new: true})
-
-res.send({
-  message: 'success',
-  product
-})
-
-/*   
-Atualiza no BD, mas retorna o produto antes da alteracao
-const product = await ProductModel.findOne({ _id: id })
-
-  await product.updateOne(req.body)
+  const product = await ProductModel.findOneAndUpdate({ _id: id }, req.body, { new: true })
 
   res.send({
     message: 'success',
     product
-  }) */
+  })
+
+  /*   
+  Atualiza no BD, mas retorna o produto antes da alteracao
+  const product = await ProductModel.findOne({ _id: id })
+  
+    await product.updateOne(req.body)
+  
+    res.send({
+      message: 'success',
+      product
+    }) */
+}
+
+async function remove(req, res) {
+  const { id } = req.params
+
+  const remove = await ProductModel.deleteOne({ _id: id })
+
+  let message = remove.acknowledged ? 'success' : 'error'
+  
+  res.send({
+    message,
+  })
 }
 
 module.exports = {
   get,
   post,
   put,
+  remove,
 }
